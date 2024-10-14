@@ -1,0 +1,27 @@
+# Змінні
+CXX = g++
+CXXFLAGS = -Wall -Iinclude
+LDFLAGS = -Lbuild
+LIB = build/libcalculator.a
+OBJ = build/calculator.o build/main.o
+EXEC = build/calculator_exec
+
+# Ціль за замовчуванням
+all: $(EXEC)
+
+# Компіляція бібліотеки
+$(LIB): build src/calculator.cpp include/calculator.h
+	$(CXX) $(CXXFLAGS) -c src/calculator.cpp -o build/calculator.o
+	ar rcs $(LIB) build/calculator.o
+
+# Компіляція виконуваного файлу
+$(EXEC): $(LIB) src/main.cpp
+	$(CXX) $(CXXFLAGS) src/main.cpp -o $(EXEC) $(LDFLAGS) -lcalculator
+
+# Директорія для об'єктних файлів
+build:
+	mkdir -p build
+
+# Очищення
+clean:
+	rm -rf build
